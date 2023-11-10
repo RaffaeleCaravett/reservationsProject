@@ -14,7 +14,7 @@ import java.util.Locale;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name="employers")
+@Table(name="dipendenti")
 @Builder(builderClassName = "DipendenteBuilder")
 public class Dipendente {
     @Id

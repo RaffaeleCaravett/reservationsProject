@@ -57,7 +57,7 @@ public class DipendenteController {
 
 
     @PostMapping("/upload/{id}")
-    public String uploadExample(@PathVariable long id,@RequestParam("avatar") MultipartFile body) throws IOException {
+    public String uploadExample(@PathVariable long id,@RequestParam("immagine_profilo") MultipartFile body) throws IOException {
         System.out.println(body.getSize());
         System.out.println(body.getContentType());
         return dipendenteService.uploadPicture(id,body);

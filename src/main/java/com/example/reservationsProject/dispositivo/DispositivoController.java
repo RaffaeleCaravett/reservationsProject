@@ -37,11 +37,8 @@ public class DispositivoController {
         if(validation.hasErrors()){
             throw new BadRequestExceptions(validation.getAllErrors());
         } else {
-            try {
-                return dispositivoService.save(body);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            return null;
+            //  return dispositivoService.save(body);
         }
     }
 

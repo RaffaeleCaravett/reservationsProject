@@ -2,7 +2,9 @@ package com.example.reservationsProject.dispositivo;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.reservationsProject.exceptions.BadRequestExceptions;
 import com.example.reservationsProject.exceptions.NotFoundException;
+import com.example.reservationsProject.utente.Dipendente;
 import com.example.reservationsProject.utente.DipendenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,8 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class DispositivoService {
@@ -29,7 +33,16 @@ public class DispositivoService {
         Dispositivo newDispositivo = new Dispositivo();
         newDispositivo.setStatoDispositivo(body.statoDispositivo());
         newDispositivo.setTipoDispositivo(body.tipoDispositivo());
-        newDispositivo.setDipendente(dipendenteRepository.findById(body.dipendente_id()).get());
+        if (body.dipendente_id() != null) {
+            Optional<Dipendente> dipendente = dipendenteRepository.findById(body.dipendente_id());
+            if (dipendente.isPresent()) {
+                newDispositivo.setDipendente(dipendente.get());
+            } else {
+                throw new BadRequestExceptions("L'id utente non esiste");
+            }
+        } else {
+            newDispositivo.setDipendente(null);
+        }
         return dispositivoRepository.save(newDispositivo);
     }
 

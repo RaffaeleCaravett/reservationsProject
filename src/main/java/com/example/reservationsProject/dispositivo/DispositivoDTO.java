@@ -10,6 +10,5 @@ public record DispositivoDTO(
         TipoDispositivo tipoDispositivo,
         @NotBlank(message = "Lo stato dispositivo è un campo obbligatorio!")
         StatoDispositivo statoDispositivo,
-        @Min(value = 1,message = "Il valore minimo è 1")
         Long dipendente_id
 ) {}

@@ -28,5 +28,11 @@ public class Dispositivo {
     private StatoDispositivo statoDispositivo;
     @JsonBackReference
     @ManyToOne
+    @JoinColumn(name = "dipendente_id", nullable = true)
     private Dipendente dipendente;
+
+    public Dispositivo(TipoDispositivo tipoDispositivo, StatoDispositivo statoDispositivo) {
+        this.tipoDispositivo = tipoDispositivo;
+        this.statoDispositivo = statoDispositivo;
+    }
 }
