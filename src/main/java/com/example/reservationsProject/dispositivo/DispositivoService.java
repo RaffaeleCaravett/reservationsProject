@@ -2,6 +2,7 @@ package com.example.reservationsProject.dispositivo;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.reservationsProject.enums.StatoDispositivo;
 import com.example.reservationsProject.exceptions.BadRequestExceptions;
 import com.example.reservationsProject.exceptions.NotFoundException;
 import com.example.reservationsProject.utente.Dipendente;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -33,15 +35,23 @@ public class DispositivoService {
         Dispositivo newDispositivo = new Dispositivo();
         newDispositivo.setStatoDispositivo(body.statoDispositivo());
         newDispositivo.setTipoDispositivo(body.tipoDispositivo());
-        if (body.dipendente_id() != null) {
-            Optional<Dipendente> dipendente = dipendenteRepository.findById(body.dipendente_id());
-            if (dipendente.isPresent()) {
-                newDispositivo.setDipendente(dipendente.get());
-            } else {
-                throw new BadRequestExceptions("L'id utente non esiste");
+        if (body.statoDispositivo() == StatoDispositivo.DISMESSO || body.statoDispositivo() == StatoDispositivo.DISPONIBILE) {
+            if(body.dipendente_id() != null){
+                throw new BadRequestExceptions("Se lo stato del dispositivo è "+body.statoDispositivo() +" , l'id del dipendente non può essere presente");
+            }else{
+                newDispositivo.setDipendente(null);
             }
-        } else {
-            newDispositivo.setDipendente(null);
+        }else{
+            if (body.dipendente_id() != null) {
+                Dipendente dipendente = dipendenteRepository.findById(body.dipendente_id())
+                        .orElseThrow(() -> new BadRequestExceptions("Id non presente"));
+                newDispositivo.setDipendente(dipendente);
+            } else {
+                if (body.statoDispositivo() == StatoDispositivo.ASSEGNATO) {
+                    throw new BadRequestExceptions("Se lo stato del dispositivo è 'assegnato', l'id del dipendente non può essere null");
+                }
+            }
+
         }
         return dispositivoRepository.save(newDispositivo);
     }
@@ -61,12 +71,32 @@ public class DispositivoService {
         dispositivoRepository.delete(found);
     }
 
-    public Dispositivo findByIdAndUpdate(int id, Dispositivo body) throws NotFoundException{
+    public DispositivoDTO findByIdAndUpdate(int id, DispositivoDTO body) throws NotFoundException {
         Dispositivo found = this.findById(id);
-        found.setStatoDispositivo(body.getStatoDispositivo());
-        found.setTipoDispositivo(body.getTipoDispositivo());
-        found.setDipendente(dipendenteRepository.findById(body.getId()).get());
-        return dispositivoRepository.save(found);
+
+        found.setStatoDispositivo(body.statoDispositivo());
+        found.setTipoDispositivo(body.tipoDispositivo());
+        if (body.statoDispositivo() == StatoDispositivo.DISMESSO || body.statoDispositivo() == StatoDispositivo.DISPONIBILE) {
+            if(body.dipendente_id() != null){
+                throw new BadRequestExceptions("Se lo stato del dispositivo è "+body.statoDispositivo() +" , l'id del dipendente non può essere presente");
+            }else{
+                found.setDipendente(null);
+            }
+        }else{
+            if (body.dipendente_id() != null) {
+                Dipendente dipendente = dipendenteRepository.findById(body.dipendente_id())
+                        .orElseThrow(() -> new BadRequestExceptions("Id non presente"));
+                found.setDipendente(dipendente);
+            } else {
+                 if (body.statoDispositivo() == StatoDispositivo.ASSEGNATO) {
+                    throw new BadRequestExceptions("Se lo stato del dispositivo è 'assegnato', l'id del dipendente non può essere null");
+                }
+        }
+
+        }
+
+        dispositivoRepository.save(found);
+        return body;
     }
 
 

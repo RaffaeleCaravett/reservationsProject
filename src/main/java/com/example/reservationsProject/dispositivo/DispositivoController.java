@@ -33,12 +33,11 @@ public class DispositivoController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED) // <-- 201
-    public Dispositivo saveDispositivo(@RequestBody @Validated DispositivoDTO body, BindingResult validation){
+    public Dispositivo saveDispositivo(@RequestBody @Validated DispositivoDTO body, BindingResult validation) throws IOException {
         if(validation.hasErrors()){
             throw new BadRequestExceptions(validation.getAllErrors());
         } else {
-            return null;
-            //  return dispositivoService.save(body);
+             return dispositivoService.save(body);
         }
     }
 
@@ -48,7 +47,7 @@ public class DispositivoController {
     }
 
     @PutMapping("/{id}")
-    public Dispositivo findByIdAndUpdate(@PathVariable int id, @RequestBody Dispositivo body) throws NotFoundException {
+    public DispositivoDTO findByIdAndUpdate(@PathVariable int id, @RequestBody DispositivoDTO body) throws NotFoundException {
         return dispositivoService.findByIdAndUpdate(id, body);
     }
 
