@@ -29,6 +29,8 @@ public class Dipendente {
     private String cognome;
     @Column(name="email")
     private String email;
+    @Column(name="password")
+    private String password;
     @Column(name="immagine_profilo")
     private String immagine_profilo;
     @JsonManagedReference

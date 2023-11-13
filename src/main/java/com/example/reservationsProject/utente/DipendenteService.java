@@ -79,4 +79,10 @@ public class DipendenteService {
             throw new RuntimeException("Impossibile caricare l'immagine", e);
         }
     }
+    public Dipendente findByEmail(String email) throws Exception {
+        return dipendenteRepository.findByEmail(email)
+                .orElseThrow(() -> new Exception("Utente con email "+ email + " non trovato"));
+    }
+
+
 }
