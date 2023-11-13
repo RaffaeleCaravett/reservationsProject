@@ -31,7 +31,7 @@ public class DipendenteService {
         dipendenteRepository.findByEmail(body.email()).ifPresent(user -> {
             throw new BadRequestExceptions("L'email " + body.email() + " è già in uso!");
         });
-        Dipendente dipendente = new Dipendente(body.username(), body.nome(), body.cognome(), body.email());
+        Dipendente dipendente = new Dipendente(body.username(), body.nome(), body.cognome(), body.email(), body.password());
         return dipendenteRepository.save(dipendente);
     }
 

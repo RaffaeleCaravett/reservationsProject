@@ -37,11 +37,12 @@ public class Dipendente {
     @OneToMany(cascade=CascadeType.ALL,mappedBy = "dipendente", fetch = FetchType.EAGER)
     private List<Dispositivo> dispositivoList;
 
-    public Dipendente(String username, String nome, String cognome, String email) {
+    public Dipendente(String username, String nome, String cognome, String email,String password) {
         this.username = username;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
+        this.password = password;
     }
 
     public static class DipendenteBuilder{
