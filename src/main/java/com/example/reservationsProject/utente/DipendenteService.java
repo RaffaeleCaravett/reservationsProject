@@ -26,14 +26,14 @@ public class DipendenteService {
     @Autowired
     private Cloudinary cloudinary;
 
-    public Dipendente save(DipendenteDTO body) throws IOException {
+    /*public Dipendente save(DipendenteDTO body) throws IOException {
         System.out.println(body.nome());
         dipendenteRepository.findByEmail(body.email()).ifPresent(user -> {
             throw new BadRequestExceptions("L'email " + body.email() + " è già in uso!");
         });
         Dipendente dipendente = new Dipendente(body.username(), body.nome(), body.cognome(), body.email(), body.password());
         return dipendenteRepository.save(dipendente);
-    }
+    }*/
 
     public Page<Dipendente> getDipendenti(int page, int size, String orderBy) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));

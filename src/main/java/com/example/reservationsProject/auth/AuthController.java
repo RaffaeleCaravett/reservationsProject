@@ -33,7 +33,7 @@ public class AuthController {
             throw new BadRequestExceptions(validation.getAllErrors());
         } else {
             try {
-                return dipendenteService.save(body);
+                return authService.save(body);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
